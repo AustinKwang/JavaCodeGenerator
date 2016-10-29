@@ -33,7 +33,7 @@ public interface I${className}Service
 
 	/**
 	 * 更新Resource
-	 * @param resourceInfo
+	 * @param ${classNameFirstLower}
      */
 	void updateByPrimaryKey(${className} ${classNameFirstLower});
 

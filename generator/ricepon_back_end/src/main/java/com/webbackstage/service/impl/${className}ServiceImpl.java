@@ -23,7 +23,7 @@ public class ${className}ServiceImpl implements I${className}Service
 	@Autowired
     private ${className}Mapper ${classNameFirstLower}Mapper;
 
-    /*
+    /**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
@@ -35,7 +35,7 @@ public class ${className}ServiceImpl implements I${className}Service
 		return ${classNameFirstLower}Mapper.selectByPrimaryKey(${table.onePKColums.columnNameFirstLower});
 	}
 
-	 /*
+	 /**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
@@ -56,7 +56,7 @@ public class ${className}ServiceImpl implements I${className}Service
 		return dataResponse;
 	}
 	
-	 /*
+	 /**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
@@ -68,7 +68,7 @@ public class ${className}ServiceImpl implements I${className}Service
 		return ${classNameFirstLower}Mapper.selectBy${className}(${classNameFirstLower});
 	}
 
-	 /*
+	 /**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
@@ -80,7 +80,7 @@ public class ${className}ServiceImpl implements I${className}Service
 		${classNameFirstLower}Mapper.updateByPrimaryKey(${classNameFirstLower});
 	}
 
-	 /*
+	 /**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
@@ -92,7 +92,7 @@ public class ${className}ServiceImpl implements I${className}Service
 		${classNameFirstLower}Mapper.insert${className}(${classNameFirstLower});
 	}
 
-	 /*
+	 /**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
