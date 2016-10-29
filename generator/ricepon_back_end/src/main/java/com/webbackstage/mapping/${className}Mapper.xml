@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webbackstage.dao.${className}Mapper" >
+	<resultMap id="BaseResultMap" type="com.webbackstage.model.${className}" >
+	<@generateMapper table/>
+	</resultMap>
+	 
+	<sql id="query">
+	 	<#list table.columns as column>
+	 	<if test="${classNameFirstLower}.${column.columnNameFirstLower} != null and ${classNameFirstLower}.${column.columnNameFirstLower} !=''">
+	   and t.${column.sqlName}=<@map '${classNameFirstLower}.${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>
+	</if>
+	</#list>
+ 	</sql>
+	 
+	<delete id="deleteByPrimaryKey" parameterType="${table.onePKColums.simpleJavaType}" >
+		delete from ${sqlName}
+		where ${table.onePKColums.sqlName} = <@map '${table.onePKColums.columnNameFirstLower}, jdbcType=${table.onePKColums.mybatisSqlTypeName}'/>
+	</delete>
+	 
+	<insert id="insert${className}" parameterType="com.webbackstage.model.${className}" >
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		<@generateInsertSQL table/>
+		</insert>
+	 
+	<update id="updateByPrimaryKey" parameterType="com.webbackstage.model.${className}" >
+		update ${sqlName} t set t.update_time=now()
+		<#list table.columns as column>
+	  	<#if !column.pk>
+		<if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} !=''">
+			,t.${column.sqlName}=<@map '${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>
+		</if>
+	  	</#if>
+	 	</#list>
+	 	 where t.${table.onePKColums.sqlName} = <@map '${table.onePKColums.columnNameFirstLower}, jdbcType=${table.onePKColums.mybatisSqlTypeName}'/>
+	</update>
+	 
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="${table.onePKColums.simpleJavaType}">
+		select t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
+		from ${sqlName} t
+		where t.${table.onePKColums.sqlName} = <@map '${table.onePKColums.columnNameFirstLower}, jdbcType=${table.onePKColums.mybatisSqlTypeName}'/>
+	</select>
+	 
+	<select id="selectBy${className}4Page" resultMap="BaseResultMap">
+		select t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
+		from ${sqlName} t
+		where 1=1
+	<include refid="query"/>
+		limit <@map 'startIndex'/>,<@map 'pageSize'/>
+	</select>
+	 
+	<select id="getTotalCount" resultType="java.lang.Long">
+		select count(1)
+		from ${sqlName} t
+		where 1=1
+	<include refid="query"/>
+	</select>
+	 
+	<select id="selectBy${className}" resultMap="BaseResultMap" >
+		select ${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t. ${column.sqlName}</#if></#list>
+		from ${sqlName}
+		where 1=1
+		<include refid="query"/>
+	</select>
+	 
+</mapper>

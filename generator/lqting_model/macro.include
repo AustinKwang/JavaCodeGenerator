@@ -1,0 +1,76 @@
+<#-- 本文件包含一些公共的函数,本文件会被其它模板自动include -->
+
+<#-- 将value变成jsp el表达式,主要由于FreeMarker生成表达式不方便 -->
+<#macro jspEl value>${r"${"}${value}}</#macro>
+
+
+<#-- 生成属性getter和setter方法 -->
+<#macro genGetSetProperties>
+	<#list table.columns as column>
+
+	public ${column.simpleJavaType} get${column.columnName}() {
+		return this.${column.columnNameFirstLower};
+	}
+	
+	public void set${column.columnName}(${column.simpleJavaType} ${column.columnNameFirstLower}) {
+		this.${column.columnNameFirstLower} = ${column.columnNameFirstLower};
+	}
+		
+	</#list>
+</#macro>
+
+
+<#--model中字段属性-->
+<#macro generateFields>
+	<#list table.columns as column>
+			<#if column.pk>
+		@Id
+		</#if>
+			<#if column.isDateTimeColumn>
+	@Temporal(TemporalType.TIMESTAMP)
+			</#if>
+			<#if column.columnNameLowerCase == 'inserttimeforhis' || column.columnNameLowerCase == 'creatorcode'>
+	@Column(name = "${column.sqlName}" , updatable = false)
+			<#elseif column.columnNameLowerCase == 'operatetimeforhis' || column.columnNameLowerCase == 'updatercode'>
+	@Column(name = "${column.sqlName}" , insertable = false)
+			<#else>
+	@Column(name = "${column.sqlName}")
+			</#if>
+		<#if column.pk>
+			private ${column.simpleJavaType} ${column.columnNameFirstLower};
+		</#if>
+		<#if !column.pk>
+  	/** ${column.columnAlias} **/
+	private ${column.simpleJavaType} ${column.columnNameFirstLower};
+		</#if>
+	</#list>
+</#macro>
+
+
+
+<#--model中非主键字段属性-->
+<#macro resultConverter>
+	@Override
+	public Object resultConverter(ResultSet result) throws SQLException
+	{
+		${className}Model ${classNameFirstLower}Model = new ${className}Model();
+	<#list table.columns as column>
+		<#if column.simpleJavaType == 'String'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getString("${column.sqlName}"));
+		<#elseif column.simpleJavaType == 'Integer'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getInt("${column.sqlName}"));
+		<#elseif column.simpleJavaType == 'Long'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getLong("${column.sqlName}"));
+		<#elseif column.simpleJavaType == 'Date'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getTimestamp("${column.sqlName}"));
+		<#elseif column.simpleJavaType == 'Timestamp'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getTimestamp("${column.sqlName}"));
+		<#elseif column.simpleJavaType == 'BigDecimal'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getBigDecimal("${column.sqlName}"));
+		<#elseif column.simpleJavaType == 'Float'>
+		${classNameFirstLower}Model.set${column.columnName}(result.getFloat("${column.sqlName}"));
+		</#if>
+	</#list>
+		return ${classNameFirstLower}Model;
+	}
+</#macro>

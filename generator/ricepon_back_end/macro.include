@@ -1,0 +1,97 @@
+<#-- 本文件包含一些公共的函数,本文件会被其它模板自动include -->
+
+<#-- 将value变成jsp el表达式,主要由于FreeMarker生成表达式不方便
+ -->
+<#macro jspEl value>${r"${"}${value}}</#macro>
+<#macro map value>${r"#{"}${value}}</#macro>
+
+<#-- 生成属性getter和setter方法 -->
+<#macro genGetSetProperties>
+	<#list table.columns as column>
+	public ${column.simpleJavaType} get${column.columnName}() {
+		return this.${column.columnNameFirstLower};
+	}
+	
+	public void set${column.columnName}(${column.simpleJavaType} ${column.columnNameFirstLower}) {
+		this.${column.columnNameFirstLower} = ${column.columnNameFirstLower};
+	}
+	
+	</#list>
+</#macro>
+
+<#--model中非主键字段属性-->
+<#macro generateFields>
+	<#list table.columns as column>
+	private ${column.simpleJavaType} ${column.columnNameFirstLower};
+		<#--</#if>-->
+	</#list>
+</#macro>
+
+
+<#--获取主键-->
+<#macro generatePKColumn splitStr>
+	<#list table.columns as column>
+		<#if column.pk>
+			${column.columnName}${splitStr}
+		</#if>
+	</#list>
+</#macro>
+
+<#macro generateMapper table>
+	<#list table.columns as column>
+		<#if column.pk>
+	<id column="${column.sqlName}" property="${column.columnNameFirstLower}" jdbcType="${column.mybatisSqlTypeName}" />
+		<#else>
+	<result column="${column.sqlName}" property="${column.columnNameFirstLower}" jdbcType="${column.mybatisSqlTypeName}" />
+	</#if>
+	</#list>
+</#macro>
+
+<#macro generateInsertSQL table>
+	insert into ${sqlName} (<#list table.columns as column><#if !column.pk>${column.sqlName},</#if></#list>)
+    values (<#list table.columns as column><#if !column.pk><@map '${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>,</#if></#list>)
+</#macro>
+
+
+<#macro generateEditForm column>
+	<#--主键不可编辑 -->
+	  <#if column.pk>
+		<#--非主键 -->
+		<#else>
+			<#--创建人、创建时间、更新人、更新时间处理 -->
+			<#if column.columnNameLowerCase == 'inserttimeforhis' || column.columnNameLowerCase == 'creatorcode'||column.columnNameLowerCase == 'operatetimeforhis' || column.columnNameLowerCase == 'updatercode'>
+			<#else>
+			<#--日期类型使用日期控件 -->
+				<#if column.isDateTimeColumn>
+							<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}">${column.columnNameFirstLower}:</label>
+					        <div class="col-sm-4">
+					            <input class="form-control" id="${column.columnNameFirstLower}" name="${column.remarks}" type="text" placeholder=""/>
+					        </div>
+				<#else>
+							<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}">${column.remarks}:</label>
+					        <div class="col-sm-4">
+					            <input class="form-control" id="${column.columnNameFirstLower}" name="${column.columnNameFirstLower}" type="text" placeholder=""/>
+					        </div>
+				</#if>
+			</#if>
+		</#if>					
+</#macro>
+
+
+<#--jsp查询条件页面生成表单 -->
+<#macro generateQueryForm column>
+	 		 <#if column.pk>
+			<#--日期类型使用日期控件 -->
+			<#elseif column.isDateTimeColumn>
+				<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}-search">${column.columnNameFirstLower}:</label>
+		        <div class="col-sm-4">
+		            <input class="form-control" id="${column.columnNameFirstLower}-search" name="${column.columnNameFirstLower}" type="text" placeholder=""/>
+		        </div>
+			<#else>
+				<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}-search">${column.columnNameFirstLower}:</label>
+		        <div class="col-sm-4">
+		            <input class="form-control" id="${column.columnNameFirstLower}-search" name="${column.columnNameFirstLower}" type="text" placeholder=""/>
+		        </div>
+		</#if>					
+</#macro>
+

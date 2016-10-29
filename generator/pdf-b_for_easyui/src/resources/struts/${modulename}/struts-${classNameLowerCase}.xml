@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="${modulename}/${classNameLowerCase}" extends="default" namespace="/${modulename}/${classNameLowerCase}">
+
+		<action name="query" class="${basepackage}.web.${className}Action" method="query"/>
+
+		<action name="delete" class="${basepackage}.web.${className}Action" method="delete"/>
+		
+		<action name="prepareQuery" class="${basepackage}.web.${className}Action" method="prepareQuery">
+			<result name="success">
+				/pages/${namespace}/${classNameLowerCase}/${className}Query.jsp
+			</result>
+		</action>
+		
+		<action name="prepareUpdate" class="${basepackage}.web.${className}Action" method="prepareUpdate">
+			<result name="success">
+				/pages/${namespace}/${classNameLowerCase}/${className}Edit.jsp
+			</result>
+		</action>
+		<action name="prepareAdd" class="${basepackage}.web.${className}Action" method="prepareAdd">
+			<result name="success">
+				/pages/${namespace}/${classNameLowerCase}/${className}Edit.jsp
+			</result>
+		</action>
+		<action name="add" class="${basepackage}.web.${className}Action" method="add">
+			<result name="success">/pages/Success.jsp</result>
+		</action>
+		<action name="update" class="${basepackage}.web.${className}Action" method="update">
+			<result name="success">/pages/Success.jsp</result>
+		</action>
+		<action name="view" class="${basepackage}.web.${className}Action" method="view">
+			<result name="success">
+				/pages/${namespace}/${classNameLowerCase}/${className}Edit.jsp
+			</result>
+		</action>
+	</package>
+</struts>
