@@ -67,7 +67,7 @@
             	${classNameFirstLower}Id: ${classNameFirstLower}Id,
             },
             success: function(response){
-                if(response.code == 0) {
+                if(response.code === 0) {
                     var data = response.data;
                     <#list table.columns as column>
                     <#if column.pk>
@@ -102,7 +102,7 @@
 	                	${classNameFirstLower}Id: ${classNameFirstLower}Id,
 	                },
 	                success: function (response) {
-	                    if(!!response && response.code){
+	                    if(!!response && response.code === 0){
 	                        ShowAlert('提示消息', '删除成功');
 	                        excuteQuery();
 	                    }else{
@@ -171,8 +171,8 @@
             url:  contextPath + '/${classNameFirstLower}/' + action,
             dataType: "json",
             data: data,
-            success: function(data){
-                if(data.code == 0 || data.code == 1)
+            success: function(response){
+                if(response.code === 0 || response.code === 1)
                 {
                     alert('更新成功');
                     $('#edit-box').modal('hide');

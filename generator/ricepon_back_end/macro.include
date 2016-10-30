@@ -22,6 +22,7 @@
 <#--model中非主键字段属性-->
 <#macro generateFields>
 	<#list table.columns as column>
+	/** ${column.remarks} */
 	private ${column.simpleJavaType} ${column.columnNameFirstLower};
 		<#--</#if>-->
 	</#list>

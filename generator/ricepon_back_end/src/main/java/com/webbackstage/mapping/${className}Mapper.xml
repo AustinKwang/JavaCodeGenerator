@@ -6,11 +6,13 @@
 	</resultMap>
 	 
 	<sql id="query">
-	 	<#list table.columns as column>
-	 	<if test="${classNameFirstLower}.${column.columnNameFirstLower} != null and ${classNameFirstLower}.${column.columnNameFirstLower} !=''">
-	   and t.${column.sqlName}=<@map '${classNameFirstLower}.${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>
-	</if>
-	</#list>
+		<if test="${classNameFirstLower} != null">
+		 	<#list table.columns as column>
+		 	<if test="${classNameFirstLower}.${column.columnNameFirstLower} != null and ${classNameFirstLower}.${column.columnNameFirstLower} !=''">
+	  		and t.${column.sqlName}=<@map '${classNameFirstLower}.${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>
+			</if>
+			</#list>
+		</if>
  	</sql>
 	 
 	<delete id="deleteByPrimaryKey" parameterType="${table.onePKColums.simpleJavaType}" >
@@ -59,8 +61,8 @@
 	</select>
 	 
 	<select id="selectBy${className}" resultMap="BaseResultMap" >
-		select ${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t. ${column.sqlName}</#if></#list>
-		from ${sqlName}
+		select t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
+		from ${sqlName} t
 		where 1=1
 		<include refid="query"/>
 	</select>

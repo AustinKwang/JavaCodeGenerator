@@ -11,6 +11,7 @@ import com.webbackstage.common.DataResponse;
 import com.webbackstage.common.ErrorClass;
 import com.webbackstage.common.ResponseConstant;
 import com.webbackstage.common.ResultResponse;
+import com.webbackstage.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -36,13 +37,12 @@ public class ${className}Controller
 	@Autowired
 	I${className}Service ${classNameFirstLower}Service;
 	
-	@RequestMapping(value={"/deleteByPK"})  
-    public @ResponseBody ResultResponse deleteByPk(@RequestParam(value = "${classNameFirstLower}Id") final Integer ${classNameFirstLower}Id) throws Exception
+	@ResponseBody
+	@RequestMapping(value={"/deleteByPK"})
+    public ErrorClass deleteByPk(@RequestParam(value = "${classNameFirstLower}Id") final Integer ${classNameFirstLower}Id) throws Exception
 	{  
-        ResultResponse response = new ResultResponse();  
         ${classNameFirstLower}Service.deleteByPrimaryKey(${classNameFirstLower}Id);
-        response.setMessage(true);  
-        return response;  
+    	return ResponseUtil.buildSuccessResponse();
     }  
 		
 	@RequestMapping(value="/showList",method = RequestMethod.GET)
@@ -81,10 +81,7 @@ public class ${className}Controller
 		}else{
 			${classNameFirstLower} = new ${className}();
 		}
-		ErrorClass response = new ErrorClass();
-		response.setCode(ResponseConstant.RESPONSE_CODE_SUCCESS); 
-		response.setData(${classNameFirstLower}Service.selectBy${className}(${classNameFirstLower}));
-	    return response;
+		return ResponseUtil.buildSuccessResponse(${classNameFirstLower}Service.selectBy${className}(${classNameFirstLower}))
 	}
 	
 	@ResponseBody
@@ -92,39 +89,31 @@ public class ${className}Controller
 	public Object get${className}ByPk(@RequestParam(value = "${classNameFirstLower}Id") final Integer ${classNameFirstLower}Id)
 	{
 		${className} ${classNameFirstLower} = ${classNameFirstLower}Service.selectByPrimaryKey(${classNameFirstLower}Id);
-		ErrorClass response = new ErrorClass();
-		response.setCode(ResponseConstant.RESPONSE_CODE_SUCCESS); //
-		response.setData(${classNameFirstLower});
-		return response;
+		return ResponseUtil.buildSuccessResponse(${classNameFirstLower});
 	}
 	
-	@RequestMapping(value="/update",method = RequestMethod.POST)
 	@ResponseBody
+	@RequestMapping(value="/update", method = RequestMethod.POST)
 	public ErrorClass update${className}(${className} ${classNameFirstLower}, final HttpServletRequest request){
-	
-		ErrorClass response = new ErrorClass();
 		Object currenUser = request.getSession().getAttribute(Common.USER_SESSION_KEY);
 		int byuserId=((sysUser)currenUser).getId();
 		String byuserName=((sysUser)currenUser).getUserName();
 		${classNameFirstLower}.setUpdateBy(byuserName);
 		${classNameFirstLower}.setUpdateTime(new Date());
 		${classNameFirstLower}Service.updateByPrimaryKey(${classNameFirstLower});
-		response.setCode(ResponseConstant.RESPONSE_CODE_SUCCESS);
-		return response;
+		return ResponseUtil.buildSuccessResponse();
 	}
 	
-	@RequestMapping(value="/save",method = RequestMethod.POST)
 	@ResponseBody
+	@RequestMapping(value="/save", method = RequestMethod.POST)
 	public ErrorClass add${className}(${className} ${classNameFirstLower}, final HttpServletRequest request){
-		ErrorClass response = new ErrorClass();
 		Object currenUser = request.getSession().getAttribute(Common.USER_SESSION_KEY);
 		int byuserId=((sysUser)currenUser).getId();
 		String byuserName=((sysUser)currenUser).getUserName();
 		${classNameFirstLower}.setCreateBy(byuserName);
 		${classNameFirstLower}.setCreateTime(new Date());
 		${classNameFirstLower}Service.insert${className}(${classNameFirstLower});
-		response.setCode(ResponseConstant.RESPONSE_CODE_SUCCESS);
-		return response;
+		return ResponseUtil.buildSuccessResponse();
 	}
 }
 	
