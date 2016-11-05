@@ -92,4 +92,4 @@
             </div>
         </div>
     </div>
-    <script src="assets/js/${classNameFirstLower}/${classNameFirstLower}.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<@jspEl 'path'/>assets/js/${classNameFirstLower}/${classNameFirstLower}.js" type="text/javascript" charset="utf-8"></script>

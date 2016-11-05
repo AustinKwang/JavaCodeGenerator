@@ -81,7 +81,7 @@ public class ${className}Controller
 		}else{
 			${classNameFirstLower} = new ${className}();
 		}
-		return ResponseUtil.buildSuccessResponse(${classNameFirstLower}Service.selectBy${className}(${classNameFirstLower}))
+		return ResponseUtil.buildSuccessResponse(${classNameFirstLower}Service.selectBy${className}(${classNameFirstLower}));
 	}
 	
 	@ResponseBody

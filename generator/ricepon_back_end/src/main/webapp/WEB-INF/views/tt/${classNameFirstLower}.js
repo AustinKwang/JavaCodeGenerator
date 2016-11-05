@@ -8,7 +8,7 @@
             datatype: 'json',
             mtype: 'GET',
             rownumbers: true,
-            height: 800,
+            height: '100%',
             autoWidth: true,
             width:null,
             shrinkToFit:false,
