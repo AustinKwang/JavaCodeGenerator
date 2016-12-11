@@ -8,33 +8,24 @@
 	<sql id="query">
 		<if test="${classNameFirstLower} != null">
 		 	<#list table.columns as column>
-		 	<#if column.mybatisSqlTypeName == 'INTEGER'>
-		 	<if test="${classNameFirstLower}.${column.columnNameFirstLower} != null">
-		 	<#else>
 		 	<if test="${classNameFirstLower}.${column.columnNameFirstLower} != null and ${classNameFirstLower}.${column.columnNameFirstLower} !=''">
-		 	</#if>
-	  			and t.${column.sqlName}=<@map '${classNameFirstLower}.${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>
+	  		and t.${column.sqlName}=<@map '${classNameFirstLower}.${column.columnNameFirstLower}, jdbcType=${column.mybatisSqlTypeName}'/>
 			</if>
 			</#list>
 		</if>
  	</sql>
  	
- 	<sql id="columns">
+ 	<sql id="colums">
  		t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
     </sql>
     
  	<sql id="orderBy">
-		<if test="dataPage != null">
-			<choose>
-			 	<#list table.columns as column>
-			 	<when> test="dataPage.sidx != null and dataPage.sidx == '${column.columnNameFirstLower}'">
-			 		ORDER BY t.${column.sqlName} <@jspEl 'dataPage.sord'/>
-				</when>
-				</#list>
-				<otherwise>
-					ORDER BY t.CREATE_TIME desc
-				</otherwise>
-			<choose>
+		<if test="${classNameFirstLower} != null">
+		 	<#list table.columns as column>
+		 	<if test="dataPage.sidx != null and dataPage.sidx == '${column.columnNameFirstLower}'">
+		 	ORDER BY t.${column.sqlName} <@jspEl 'dataPage.sord'/>
+			</if>
+			</#list>
 		</if>
  	</sql>
 	 
@@ -47,7 +38,7 @@
 		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
 			SELECT LAST_INSERT_ID()
 		</selectKey>
-				<@generateInsertSQL table/>
+		<@generateInsertSQL table/>
 		</insert>
 	 
 	<update id="updateByPrimaryKey" parameterType="com.webbackstage.model.${className}" >
@@ -63,32 +54,29 @@
 	</update>
 	 
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="${table.onePKColums.simpleJavaType}">
-		select
-		<include refid="columns"/>
+		select t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
 		from ${sqlName} t
 		where t.${table.onePKColums.sqlName} = <@map '${table.onePKColums.columnNameFirstLower}, jdbcType=${table.onePKColums.mybatisSqlTypeName}'/>
 	</select>
 	 
 	<select id="selectBy${className}4Page" resultMap="BaseResultMap">
-		select 
-		<include refid="columns"/>
+		select t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
 		from ${sqlName} t
 		where 1=1
-		<include refid="query"/>
-		<include refid="orderBy" />
-		limit <@map 'dataPage.startRowIndex,jdbcType=INTEGER'/>, <@map 'dataPage.rows,jdbcType=INTEGER'/>
+	<include refid="query"/>
+	<include refid="orderBy" />
+		limit <@map 'startIndex'/>,<@map 'pageSize'/>
 	</select>
 	 
 	<select id="getTotalCount" resultType="java.lang.Long">
 		select count(1)
 		from ${sqlName} t
 		where 1=1
-		<include refid="query"/>
+	<include refid="query"/>
 	</select>
 	 
 	<select id="selectBy${className}" resultMap="BaseResultMap" >
-		select 
-		<include refid="columns"/>
+		select t.${table.onePKColums.sqlName}<#list table.columns as column><#if !column.pk>, t.${column.sqlName}</#if></#list>
 		from ${sqlName} t
 		where 1=1
 		<include refid="query"/>

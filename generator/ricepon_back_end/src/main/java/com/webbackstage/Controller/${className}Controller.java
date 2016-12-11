@@ -9,8 +9,6 @@ import com.webbackstage.common.Common;
 import com.webbackstage.common.DataRequest;
 import com.webbackstage.common.DataResponse;
 import com.webbackstage.common.ErrorClass;
-import com.webbackstage.common.ResponseConstant;
-import com.webbackstage.common.ResultResponse;
 import com.webbackstage.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,12 +71,8 @@ public class ${className}Controller
 	
 	@ResponseBody
 	@RequestMapping(value = "query", method = RequestMethod.GET)
-	public ErrorClass query(HttpServletRequest request) {
-		String queryStr = request.getParameter("queryParam");
-		${className} ${classNameFirstLower} = null;
-		if(queryStr != null && queryStr.length() > 0){
-			${classNameFirstLower} = JSONObject.parseObject(queryStr, ${className}.class);
-		}else{
+	public ErrorClass query(HttpServletRequest request, ${className} ${classNameFirstLower}) {
+		if(${classNameFirstLower} == null){
 			${classNameFirstLower} = new ${className}();
 		}
 		return ResponseUtil.buildSuccessResponse(${classNameFirstLower}Service.selectBy${className}(${classNameFirstLower}));

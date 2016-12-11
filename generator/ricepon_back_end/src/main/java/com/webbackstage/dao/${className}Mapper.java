@@ -1,5 +1,6 @@
 package com.webbackstage.dao;
 
+import com.webbackstage.common.DataRequest;
 import com.webbackstage.model.${className};
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ public interface ${className}Mapper
 
 	${className} selectByPrimaryKey(${table.onePKColums.simpleJavaType} ${table.onePKColums.columnNameFirstLower});
 
-	List<${className}> selectBy${className}4Page(@Param("${classNameFirstLower}") ${className} ${classNameFirstLower}, @Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+	List<${className}> selectBy${className}4Page(@Param("${classNameFirstLower}") ${className} ${classNameFirstLower}, @Param("dataPage") DataRequest dataPage);
 	
 	Long getTotalCount(@Param("${classNameFirstLower}") ${className} ${classNameFirstLower});
 	

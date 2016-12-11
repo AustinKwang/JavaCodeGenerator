@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="recipon" uri="/WEB-INF/tlds/recipon.tld"%>
 <head>
     <title>需要修改</title>
+    <link href="<@jspEl 'path'/>assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 </head>
 <body>
 	<div class="search-box">
@@ -36,14 +38,16 @@
 					</#if>
 	      		</#list>
             <div class="form-group">
-				<button class="btn btn-primary" type="button" id="search-btn">查询</button>
-				<button class="btn btn-primary" type="button" id="add-btn">新增</button>
+	            <div style="text-align: center;">
+					<button class="btn btn-primary" type="button" id="search-btn"><recipon:lg key="lg_sreachButtonMsg" defaultValue="lg_sreachButtonMsg搜索"></recipon:lg></button>
+					<button class="btn btn-primary" type="button" id="add-btn"><recipon:lg key="lg_addMsg" defaultValue="lg_addMsg新增"></recipon:lg></button>
+				</div>
             </div>
         </form>
     </div>
 
     <div class="boxcard col-lg-12">
-        <table class="table table-striped table-hover" id="${classNameFirstLower}-table"></table>
+        <table class="table table-striped table-bordered dt-responsive nowrap table-hover" width="100%" id="${classNameFirstLower}-table"></table>
         <div id="gridPager"></div>
     </div>
     
@@ -86,10 +90,13 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-                    <button class="btn btn-default" type="button" id="save-btn">保存</button>
+                    <button class="btn btn-default" type="button" data-dismiss="modal"><recipon:lg key="lg_cancelMsg" defaultValue="lg_cancelMsg取消"></recipon:lg></button>
+                    <button class="btn btn-default" type="button" id="save-btn"><recipon:lg key="lg_saveMsg" defaultValue="lg_saveMsg保存"></recipon:lg></button>
                 </div>
             </div>
         </div>
     </div>
+    <script src="<@jspEl 'path'/>assets/plugins/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<@jspEl 'path'/>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript" charset="utf-8"/>
     <script src="<@jspEl 'path'/>assets/js/${classNameFirstLower}/${classNameFirstLower}.js" type="text/javascript" charset="utf-8"></script>
+</body>

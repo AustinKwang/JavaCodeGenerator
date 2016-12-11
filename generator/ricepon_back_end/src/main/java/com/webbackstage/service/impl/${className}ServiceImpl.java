@@ -44,7 +44,7 @@ public class ${className}ServiceImpl implements I${className}Service
 	 */
 	public DataResponse<${className}> selectBy${className}(${className} ${classNameFirstLower}, DataRequest dataPage)
 	{
-		List<${className}> data = ${classNameFirstLower}Mapper.selectBy${className}4Page(${classNameFirstLower}, dataPage.getStartRowIndex(), dataPage.getRows());
+		List<${className}> data = ${classNameFirstLower}Mapper.selectBy${className}4Page(${classNameFirstLower}, dataPage);
 		long totalCount = ${classNameFirstLower}Mapper.getTotalCount(${classNameFirstLower});
 		int pageSize = dataPage.getRows();
 		int totalPages=(int) Math.ceil(totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
@@ -97,7 +97,7 @@ public class ${className}ServiceImpl implements I${className}Service
 	 * 
 	 * @see com.webbackstage.service.I${className}Service#
 	 * deleteByPrimaryKey
-	 * (${table.onePKColums.simpleJavaType}}
+	 * (${table.onePKColums.simpleJavaType})
 	 */
 	public void deleteByPrimaryKey(${table.onePKColums.simpleJavaType} ${table.onePKColums.columnNameFirstLower})
 	{

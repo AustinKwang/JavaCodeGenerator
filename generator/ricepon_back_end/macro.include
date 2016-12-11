@@ -56,43 +56,57 @@
 
 <#macro generateEditForm column>
 	<#--主键不可编辑 -->
-	  <#if column.pk>
-		<#--非主键 -->
-		<#else>
-			<#--创建人、创建时间、更新人、更新时间处理 -->
-			<#if column.columnNameLowerCase == 'inserttimeforhis' || column.columnNameLowerCase == 'creatorcode'||column.columnNameLowerCase == 'operatetimeforhis' || column.columnNameLowerCase == 'updatercode'>
-			<#else>
-			<#--日期类型使用日期控件 -->
-				<#if column.isDateTimeColumn>
-							<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}">${column.columnNameFirstLower}:</label>
-					        <div class="col-sm-4">
-					            <input class="form-control" id="${column.columnNameFirstLower}" name="${column.remarks}" type="text" placeholder=""/>
-					        </div>
+			  	<#if column.pk>
+				<#--非主键 -->
 				<#else>
-							<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}">${column.remarks}:</label>
+					<#--创建人、创建时间、更新人、更新时间处理 -->
+					<#if column.columnNameLowerCase == 'inserttimeforhis' || column.columnNameLowerCase == 'creatorcode'||column.columnNameLowerCase == 'operatetimeforhis' || column.columnNameLowerCase == 'updatercode'>
+					<#else>
+							<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}"><recipon:lg key="lg_key_${column.columnNameFirstLower}" defaultValue="${column.remarks}"></recipon:lg>:</label>
+						<#if column.isDateTimeColumn><#--日期类型使用日期控件 -->
+					        <div class="col-sm-4">
+					            <div class="input-append date form_datetime" data-date-format="yyyy-mm-dd hh:ii" >
+					        		<input class="form-control" id="${column.columnNameFirstLower}" name="${column.columnNameFirstLower}" type="text" readonly="readonly" placeholder="点击选择时间"/>
+									<span class="add-on"><i class="icon-remove"></i></span>
+									<span class="add-on"><i class="icon-calendar"></i></span>
+							 	</div>
+					        </div>
+				        <#elseif column.isNumberColumn><#--数字 -->
+		        			<div class="col-sm-4">
+					            <input class="form-control" id="${column.columnNameFirstLower}" name="${column.columnNameFirstLower}" type="number" placeholder=""/>
+					        </div>
+						<#else>
 					        <div class="col-sm-4">
 					            <input class="form-control" id="${column.columnNameFirstLower}" name="${column.columnNameFirstLower}" type="text" placeholder=""/>
 					        </div>
-				</#if>
-			</#if>
-		</#if>					
+						</#if>
+					</#if>
+				</#if>					
 </#macro>
 
 
 <#--jsp查询条件页面生成表单 -->
 <#macro generateQueryForm column>
-	 		 <#if column.pk>
-			<#--日期类型使用日期控件 -->
-			<#elseif column.isDateTimeColumn>
-				<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}-search">${column.columnNameFirstLower}:</label>
+ 		<#if column.pk>
+		<#else>
+				<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}-search"><recipon:lg key="lg_key_${column.columnNameFirstLower}" defaultValue="${column.remarks}"></recipon:lg>:</label>
+			<#if column.isDateTimeColumn><#--日期类型使用日期控件 -->
 		        <div class="col-sm-4">
+		        	<div class="input-append date form_datetime" data-date-format="yyyy-mm-dd hh:ii" >
+		        		<input class="form-control" id="${column.columnNameFirstLower}-search" name="${column.columnNameFirstLower}" type="text" placeholder="点击选择时间" readonly="readonly"/>
+						<span class="add-on"><i class="icon-remove"></i></span>
+						<span class="add-on"><i class="icon-calendar"></i></span>
+				 	</div>
+		        </div>
+			 <#elseif column.isNumberColumn>
+		        <div class="col-sm-4">
+		            <input class="form-control" id="${column.columnNameFirstLower}-search" name="${column.columnNameFirstLower}" type="number" placeholder=""/>
+		        </div>
+	        <#else>
+	       		<div class="col-sm-4">
 		            <input class="form-control" id="${column.columnNameFirstLower}-search" name="${column.columnNameFirstLower}" type="text" placeholder=""/>
 		        </div>
-			<#else>
-				<label class="col-sm-2 control-label" for="${column.columnNameFirstLower}-search">${column.columnNameFirstLower}:</label>
-		        <div class="col-sm-4">
-		            <input class="form-control" id="${column.columnNameFirstLower}-search" name="${column.columnNameFirstLower}" type="text" placeholder=""/>
-		        </div>
+	        </#if>
 		</#if>					
 </#macro>
 

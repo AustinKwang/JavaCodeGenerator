@@ -11,6 +11,9 @@ public class DatabaseDataTypesUtils {
 
 	private final static IntStringMap _preferredJavaTypeForSqlType = new IntStringMap();
 	 
+	public static boolean isNumber(String javaType){
+		return isFloatNumber(javaType) || isIntegerNumber(javaType);
+	}
 	public static boolean isFloatNumber(String javaType) {
 		if(javaType.endsWith("Float") || javaType.endsWith("Double") || javaType.endsWith("BigDecimal") || javaType.endsWith("BigInteger")) {
 			return true;
